@@ -20,7 +20,7 @@ fun Score.mateScore() = when {
 }
 fun Score.toUCI(): String = when (this.absoluteValue) {
     in MATE_IN_MAX..MATE -> "mate ${this.mateScore()}"
-    else -> this.toString()
+    else                 -> "cp $this"
 }
 const val MATE: Score = 30000
 const val MATE_IN_MAX: Score = MATE - 999

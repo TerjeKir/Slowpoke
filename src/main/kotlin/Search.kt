@@ -51,7 +51,7 @@ class Limits {
         isInfinite = "infinite" in str
         isTimeLimited = time != 0 || movetime != 0
 
-        val overhead = 5
+        val overhead = 15
         spend = Duration.milliseconds(
             when (movetime) {
                 0    -> (time / movesToGo + inc).coerceAtMost(time - overhead)
@@ -66,13 +66,16 @@ fun go(pos: Position, str: String) {
 
     limits = Limits().apply { parse(str.substringAfter(' ', ""), pos.stm) }
     STOP = false
+    var bestMove = Move(A1, A1)
 
     for (depth in 1..limits.getDepth()) {
         val score = pos.minimax(0, depth)
 
-        if (STOP) break
+        if (STOP || limits.timeUp()) break
 
-        println("info depth $depth score ${score.toUCI()} time ${limits.elapsed().inWholeMilliseconds}")
+        bestMove = bestMove_
+
+        println("info depth $depth score ${score.toUCI()} time ${limits.elapsed().inWholeMilliseconds} pv ${bestMove.toUCI()}")
 
         if (MATE - abs(score) <= 2 * abs(limits.getMate())) break
     }
@@ -82,30 +85,29 @@ fun go(pos: Position, str: String) {
     println("bestmove ${bestMove.toUCI()}")
 }
 
-var bestMove: Move = Move(A1, A1)
+var bestMove_: Move = Move(A1, A1)
 
 @ExperimentalTime
 fun Position.minimax(ply: Int, depth: Int): Int {
 
     val root = ply == 0
 
-    if (STOP || limits.timeUp()) return 0
+    if (!root && (STOP || limits.timeUp() || mr50 >= 100)) return 0
 
     if (depth == 0) return eval()
 
     var bestScore = -INF
 
     for (move in genMoves()) {
+
         if (!makeMove(move)) continue
-
         val score = -minimax(ply + 1, depth - 1)
-
         takeMove()
 
         if (score > bestScore) {
             bestScore = score
             if (root)
-                bestMove = move
+                bestMove_ = move
         }
     }
 
