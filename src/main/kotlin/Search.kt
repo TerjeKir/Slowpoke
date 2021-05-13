@@ -5,6 +5,7 @@ import kotlin.time.ExperimentalTime
 import kotlin.time.TimeSource.Monotonic.markNow
 
 
+@Volatile
 var STOP = false
 
 @ExperimentalTime
