@@ -37,7 +37,7 @@ const val KING: PieceType = 6
 typealias Piece = Int
 fun makePiece(c: Color, pt: PieceType): Piece = (c shl 3) + pt
 fun Piece.color(): Color = this shr 3
-fun Piece.type(): Color = this and 7
+fun Piece.type(): PieceType = this and 7
 fun Piece.toPieceChar(): Char = ".pnbrqk..PNBRQK"[this]
 fun Char.toPiece(): Piece = ".pnbrqk..PNBRQK".indexOf(this)
 
