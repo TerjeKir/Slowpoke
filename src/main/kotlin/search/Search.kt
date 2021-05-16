@@ -33,7 +33,7 @@ fun search(pos: Position) {
 
     for (depth in 1..limits.getDepth()) {
 
-        val score = pos.minimax(ss, 0, depth)
+        val score = pos.alphabeta(ss, -INF, INF, 0, depth)
 
         if (STOP || limits.timeUp()) break
 
@@ -50,7 +50,7 @@ fun search(pos: Position) {
 }
 
 @ExperimentalTime
-fun Position.minimax(ss: SS, ply: Int, depth: Int): Int {
+fun Position.alphabeta(ss: SS, alpha: Score, beta: Score, ply: Int, depth: Int): Int {
 
     val root = ply == 0
 
@@ -60,22 +60,27 @@ fun Position.minimax(ss: SS, ply: Int, depth: Int): Int {
 
     if (depth == 0) return eval()
 
-    var bestScore = -INF
+    var bestScore = alpha
+    var moveCount = 0
 
     for (move in genMoves()) {
 
         if (!makeMove(move)) continue
-        val score = -minimax(ss, ply + 1, depth - 1)
+        val score = -alphabeta(ss, -beta, -bestScore, ply + 1, depth - 1)
         takeMove()
+
+        moveCount++
 
         if (score > bestScore) {
             bestScore = score
 
             ss[ply].pv.build(move, ss[ply+1].pv)
+
+            if (score >= beta) break
         }
     }
 
-    if (bestScore == -INF) return when {
+    if (moveCount == 0) return when {
         inCheck(stm) -> -(MATE - ply)
         else         -> 0
     }

@@ -1,6 +1,6 @@
 import engine.*
 import search.Stack
-import search.minimax
+import search.alphabeta
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.time.ExperimentalTime
@@ -9,7 +9,9 @@ import kotlin.time.ExperimentalTime
 @ExperimentalTime
 internal class SearchTest {
 
-    val mx: (Int, String) -> String = { d, fen -> Position(fen).minimax(Array(100) { Stack() }, 0, d).toUCI() }
+    val mx: (Int, String) -> String = { d, fen ->
+        Position(fen).alphabeta(Array(100) { Stack() }, -INF, INF, 0, d).toUCI()
+    }
     val mate:  (Int) -> String = { ply ->   (MATE - ply).toUCI() }
     val mated: (Int) -> String = { ply -> (-(MATE - ply)).toUCI() }
 
@@ -20,5 +22,7 @@ internal class SearchTest {
         assertEquals(mated(2), mx(3, "8/4B3/8/8/8/3R4/2K5/k7 b - - 2 2"))
         assertEquals(mate( 3), mx(4, "8/4B3/8/8/8/8/2KR4/k7 w - - 1 2"))
         assertEquals(mated(4), mx(5, "8/4B3/8/8/8/8/k1KR4/8 b - - 0 1"))
+
+        assertEquals(mated(4), mx(5, "6R1/8/7k/r5p1/8/1r4K1/8/7r w - - 4 60"))
     }
 }
