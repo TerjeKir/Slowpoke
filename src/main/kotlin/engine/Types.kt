@@ -73,7 +73,6 @@ fun Rank.rankToChar(): Char = (this + '1'.code).toChar()
 fun Rank.relative(c: Color): Rank = if (c == WHITE) this else RANK_8 - this
 const val RANK_1 = 0
 const val RANK_4 = 3
-const val RANK_7 = 6
 const val RANK_8 = 7
 
 typealias File = Int

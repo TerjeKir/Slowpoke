@@ -34,34 +34,30 @@ fun Position.genMoves(): MoveList {
         else  -> Triple(SOUTH, EAST, WEST)
     }
 
+    val promo = BBrank1 or BBrank8
+    val normal = promo.inv()
+
     val genPawnMoves = { moves: Bitboard, step: Direction ->
-        moves.forEach { res.add(Move(it - step, it)) }
-    }
-    val genPromos = { moves: Bitboard, step: Direction ->
-        moves.forEach { res.addPromos(it - step, it) }
+        (moves and promo).forEach { res.addPromos(it - step, it) }
+        (moves and normal).forEach { res.add(Move(it - step, it)) }
     }
 
     val empty = occ.inv()
     val enemies = colorBB[stm xor 1]
-    val pawnsOn7th = pieces(stm, PAWN) and RankBB[RANK_7.relative(stm)]
-    val pawnsOther = pieces(stm, PAWN) xor pawnsOn7th
+    val pawns = pieces(stm, PAWN)
 
-    val push = empty and pawnsOther.shift(up)
+    val push = empty and pawns.shift(up)
     val double = empty and push.shift(up) and RankBB[RANK_4.relative(stm)]
 
     genPawnMoves(push, up)
-    genPawnMoves(double, 2 * up)
-    genPawnMoves(enemies and pawnsOther.shift(up + left), up + left)
-    genPawnMoves(enemies and pawnsOther.shift(up + right), up + right)
-
-    genPromos(empty and pawnsOn7th.shift(up), up)
-    genPromos(enemies and pawnsOn7th.shift(up + left), up + left)
-    genPromos(enemies and pawnsOn7th.shift(up + right), up + right)
+    genPawnMoves(double, up * 2)
+    genPawnMoves(enemies and pawns.shift(up + left), up + left)
+    genPawnMoves(enemies and pawns.shift(up + right), up + right)
 
     if (inCheck(stm)) return res
 
     if (ep != 0)
-        for (from in pawnsOther and pawnAttackBB(stm xor 1, ep))
+        for (from in pawns and pawnAttackBB(stm xor 1, ep))
             res.add(Move(from, ep, ENPAS))
 
     fun noBlocks(vararg sqs: Square): Boolean = (Bitboard(*sqs) and occ).isEmpty()
