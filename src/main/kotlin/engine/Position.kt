@@ -4,6 +4,7 @@ package engine
 class Position() {
 
     class History {
+        var key: Key = 0
         var move: Move = 0
         var cr: CastlingRight = 0
         var ep: Square = 0
@@ -14,6 +15,8 @@ class Position() {
     var pieceBB: Array<Bitboard> = Array(7) { Bitboard() }
     var colorBB: Array<Bitboard> = Array(2) { Bitboard() }
     var board: Array<Piece> = Array(64) { 0 }
+
+    var key: Key = 0
 
     var stm: Color = WHITE
     var cr: CastlingRight = 0
@@ -35,6 +38,7 @@ class Position() {
             board[sq] = piece
             pieceBB[piece.type()]  = pieceBB[piece.type()]  or sq
             colorBB[piece.color()] = colorBB[piece.color()] or sq
+            key = key xor PieceKeys[piece][sq]
         }
 
         var sq = A8
@@ -64,6 +68,10 @@ class Position() {
 
         mr50 = readOrDefault(0)
         fullmove = readOrDefault(1)
+
+        if (stm == WHITE) key = key xor SideKey
+        if (ep != 0) key = key xor PieceKeys[0][ep]
+        key = key xor CastleKeys[cr]
     }
 
     override fun toString(): String {

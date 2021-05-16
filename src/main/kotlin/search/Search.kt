@@ -56,7 +56,9 @@ fun Position.alphabeta(ss: SS, alpha: Score, beta: Score, ply: Int, depth: Int):
 
     ss[ply].pv.clear()
 
-    if (!root && (STOP || limits.timeUp() || mr50 >= 100)) return 0
+    if (!root) {
+        if (STOP || limits.timeUp() || mr50 >= 100 || hasRepeated()) return 0
+    }
 
     if (depth == 0) return eval()
 
@@ -74,7 +76,7 @@ fun Position.alphabeta(ss: SS, alpha: Score, beta: Score, ply: Int, depth: Int):
         if (score > bestScore) {
             bestScore = score
 
-            ss[ply].pv.build(move, ss[ply+1].pv)
+            ss[ply].pv.build(move, ss[ply + 1].pv)
 
             if (score >= beta) break
         }

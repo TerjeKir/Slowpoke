@@ -16,7 +16,7 @@ fun main() {
             "isready"    -> println("readyok")
             "position"   -> pos = position(input)
             "setoption"  -> setOption(input)
-            "ucinewgame" -> {} // TODO("Reset TT")
+            "ucinewgame" -> {}
             "stop"       -> STOP = true
             "quit"       -> break
 
@@ -44,7 +44,8 @@ fun position(str: String): Position {
     return Position(fen).apply {
         if (str.contains("moves "))
             str.split("moves ")[1].split(" ").forEach {
-                copyMake(it.toMove(this))
+                makeMove(it.toMove(this))
+                if (mr50 == 0) histPly = 0
             }
     }
 }
