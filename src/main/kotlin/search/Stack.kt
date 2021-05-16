@@ -30,6 +30,6 @@ class PV {
         val res = StringBuilder()
         for (i in 0 until len)
             res.append(moves[i].toUCI() + " ")
-        return res.toString()
+        return res.dropLast(1).toString()
     }
 }
