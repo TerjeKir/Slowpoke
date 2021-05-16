@@ -10,7 +10,7 @@ class MoveList : Iterator<Move> {
     fun add(move: Move) { moves[size++] = Pair(move, 0) }
 
     fun addPromos(from: Square, to: Square) {
-        for (pt in QUEEN downTo KNIGHT)
+        for (pt in KNIGHT..QUEEN)
             add(Move(from, to, PROMO, pt))
     }
 
