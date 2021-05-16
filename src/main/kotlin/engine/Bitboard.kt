@@ -65,8 +65,8 @@ data class Bitboard(val bb: ULong) : Iterable<Square> {
         fun Boolean.toInt(): Int = if (this) 1 else 0
 
         val res = StringBuilder()
-        for (rank in 7 downTo 0) {
-            for (file in 0..7) {
+        for (rank in RANK_8 downTo RANK_1) {
+            for (file in FILE_A..FILE_H) {
                 res.append((this and Bitboard(makeSquare(rank, file))).nonEmpty().toInt())
             }
             res.append("\n")
