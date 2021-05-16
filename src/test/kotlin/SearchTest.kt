@@ -1,4 +1,5 @@
 import engine.*
+import search.minimax
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.time.ExperimentalTime

@@ -26,6 +26,8 @@ class Position() {
     var histPly: Int = 0
     val hist: Array<History> = Array(256) { History() }
 
+    var nodeCount = 0UL
+
     fun history(offset: Int) = hist[histPly + offset]
 
     constructor(fen: String) : this() {

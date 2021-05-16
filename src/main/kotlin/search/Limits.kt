@@ -1,20 +1,14 @@
+package search
+
 import engine.*
-import kotlin.math.abs
 import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
-import kotlin.time.TimeSource.Monotonic.markNow
-
-
-@Volatile
-var STOP = false
-
-@ExperimentalTime
-var limits: Limits = Limits()
+import kotlin.time.TimeSource
 
 
 @ExperimentalTime
 class Limits {
-    private val start = markNow()
+    private val start = TimeSource.Monotonic.markNow()
     private var spend = Duration.ZERO
     private var time = 0
     private var inc = 0
@@ -60,62 +54,4 @@ class Limits {
             }
         )
     }
-}
-
-@ExperimentalTime
-fun go(pos: Position, str: String) {
-
-    limits = Limits().apply { parse(str.substringAfter(' ', ""), pos.stm) }
-    STOP = false
-    var bestMove = Move(A1, A1)
-
-    for (depth in 1..limits.getDepth()) {
-        val score = pos.minimax(0, depth)
-
-        if (STOP || limits.timeUp()) break
-
-        bestMove = bestMove_
-
-        println("info depth $depth score ${score.toUCI()} time ${limits.elapsed().inWholeMilliseconds} pv ${bestMove.toUCI()}")
-
-        if (MATE - abs(score) <= 2 * abs(limits.getMate())) break
-    }
-
-    while (limits.isInfinite() && !STOP) { /* Wait for stop */ }
-
-    println("bestmove ${bestMove.toUCI()}")
-}
-
-var bestMove_: Move = Move(A1, A1)
-
-@ExperimentalTime
-fun Position.minimax(ply: Int, depth: Int): Int {
-
-    val root = ply == 0
-
-    if (!root && (STOP || limits.timeUp() || mr50 >= 100)) return 0
-
-    if (depth == 0) return eval()
-
-    var bestScore = -INF
-
-    for (move in genMoves()) {
-
-        if (!makeMove(move)) continue
-        val score = -minimax(ply + 1, depth - 1)
-        takeMove()
-
-        if (score > bestScore) {
-            bestScore = score
-            if (root)
-                bestMove_ = move
-        }
-    }
-
-    if (bestScore == -INF) return when {
-        inCheck(stm) -> -(MATE - ply)
-        else         -> 0
-    }
-
-    return bestScore
 }

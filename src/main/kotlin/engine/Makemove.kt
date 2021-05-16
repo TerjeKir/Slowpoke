@@ -74,6 +74,7 @@ fun Position.makeMove(move: Move): Boolean {
     ep = 0
     mr50++
     histPly++
+    nodeCount++
 
     if (captured != 0) {
         mr50 = 0
