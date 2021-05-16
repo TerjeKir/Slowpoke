@@ -4,7 +4,7 @@ package engine
 class Position() {
 
     class History {
-        var move: Move = 0U
+        var move: Move = 0
         var cr: CastlingRight = 0
         var ep: Square = 0
         var mr50: Int = 0

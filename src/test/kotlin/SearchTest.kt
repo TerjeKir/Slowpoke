@@ -1,4 +1,5 @@
 import engine.*
+import search.Stack
 import search.minimax
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -8,7 +9,7 @@ import kotlin.time.ExperimentalTime
 @ExperimentalTime
 internal class SearchTest {
 
-    val mx: (Int, String) -> String = { d, fen -> Position(fen).minimax(0, d).toUCI() }
+    val mx: (Int, String) -> String = { d, fen -> Position(fen).minimax(Array(100) { Stack() }, 0, d).toUCI() }
     val mate:  (Int) -> String = { ply ->   (MATE - ply).toUCI() }
     val mated: (Int) -> String = { ply -> (-(MATE - ply)).toUCI() }
 

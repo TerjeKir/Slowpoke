@@ -21,16 +21,25 @@ fun go(pos: Position, str: String) {
     limits = Limits().apply { parse(str, pos.stm) }
     STOP = false
     pos.nodeCount = 0UL
+
+    search(pos)
+}
+
+@ExperimentalTime
+fun search(pos: Position) {
+
+    val ss = Array(100) { Stack() }
     var bestMove = Move(A1, A1)
 
     for (depth in 1..limits.getDepth()) {
-        val score = pos.minimax(0, depth)
+
+        val score = pos.minimax(ss, 0, depth)
 
         if (STOP || limits.timeUp()) break
 
-        bestMove = bestMove_
+        bestMove = ss[0].pv.moves[0]
 
-        printThinking(limits, depth, score, pos.nodeCount, bestMove)
+        printThinking(limits, depth, score, pos.nodeCount, ss[0].pv)
 
         if (MATE - abs(score) <= 2 * abs(limits.getMate())) break
     }
@@ -40,12 +49,12 @@ fun go(pos: Position, str: String) {
     printConclusion(bestMove)
 }
 
-var bestMove_: Move = Move(A1, A1)
-
 @ExperimentalTime
-fun Position.minimax(ply: Int, depth: Int): Int {
+fun Position.minimax(ss: SS, ply: Int, depth: Int): Int {
 
     val root = ply == 0
+
+    ss[ply].pv.clear()
 
     if (!root && (STOP || limits.timeUp() || mr50 >= 100)) return 0
 
@@ -56,13 +65,13 @@ fun Position.minimax(ply: Int, depth: Int): Int {
     for (move in genMoves()) {
 
         if (!makeMove(move)) continue
-        val score = -minimax(ply + 1, depth - 1)
+        val score = -minimax(ss, ply + 1, depth - 1)
         takeMove()
 
         if (score > bestScore) {
             bestScore = score
-            if (root)
-                bestMove_ = move
+
+            ss[ply].pv.build(move, ss[ply+1].pv)
         }
     }
 

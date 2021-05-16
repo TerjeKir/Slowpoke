@@ -57,10 +57,16 @@ fun setOption(str: String) {
 }
 
 @ExperimentalTime
-fun printThinking(limits: Limits, depth: Int, score: Score, nodes: ULong, bm: Move) {
+fun printThinking(limits: Limits, depth: Int, score: Score, nodes: ULong, pv: PV) {
     val elapsed = limits.elapsed().inWholeMilliseconds.coerceAtLeast(1)
     val nps = nodes * 1000U / elapsed.toULong()
-    println("info depth $depth score ${score.toUCI()} time $elapsed nodes $nodes nps $nps pv ${bm.toUCI()}")
+    println("info " +
+            "depth $depth " +
+            "score ${score.toUCI()} " +
+            "time $elapsed " +
+            "nodes $nodes " +
+            "nps $nps " +
+            "pv $pv")
 }
 
 fun printConclusion(bm: Move) {

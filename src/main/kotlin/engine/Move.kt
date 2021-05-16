@@ -1,7 +1,7 @@
 package engine
 
 
-typealias Move = UShort
+typealias Move = Short
 typealias MoveType = Int
 const val NORMAL = 0
 const val PROMO  = 1 shl 14
@@ -9,12 +9,12 @@ const val ENPAS  = 2 shl 14
 const val CASTLE = 3 shl 14
 
 fun Move(from: Square, to: Square, mt: MoveType = NORMAL, promo: PieceType = KNIGHT): Move =
-    mt.toUShort() or ((promo - KNIGHT) shl 12).toUShort() or (from shl 6).toUShort() or to.toUShort()
+    (mt or ((promo - KNIGHT) shl 12) or (from shl 6) or to).toShort()
 
-fun Move.from(): Square = (this.toInt() shr 6) and 0x3F
+fun Move.from(): Square = (this.toInt() ushr 6) and 0x3F
 fun Move.to(): Square = this.toInt() and 0x3F
 fun Move.type(): MoveType = this.toInt() and (3 shl 14)
-fun Move.promo(): PieceType = KNIGHT + ((this.toInt() shr 12) and 3)
+fun Move.promo(): PieceType = KNIGHT + ((this.toInt() ushr 12) and 3)
 
 fun Move.captureSq(): PieceType = if (type() != ENPAS) to() else to() xor 8
 
