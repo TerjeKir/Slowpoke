@@ -5,6 +5,7 @@ import eval
 import printConclusion
 import printThinking
 import kotlin.math.abs
+import kotlin.math.max
 import kotlin.time.ExperimentalTime
 
 
@@ -13,6 +14,8 @@ var STOP = false
 
 @ExperimentalTime
 private var limits: Limits = Limits()
+
+private const val MAX_PLY = 100
 
 
 @ExperimentalTime
@@ -50,7 +53,7 @@ fun search(pos: Position) {
 }
 
 @ExperimentalTime
-fun Position.alphabeta(ss: SS, alpha: Score, beta: Score, ply: Int, depth: Int): Int {
+fun Position.alphabeta(ss: SS, alpha: Score, beta: Score, ply: Int, depth: Int): Score {
 
     val root = ply == 0
 
@@ -58,9 +61,11 @@ fun Position.alphabeta(ss: SS, alpha: Score, beta: Score, ply: Int, depth: Int):
 
     if (!root) {
         if (STOP || limits.timeUp() || mr50 >= 100 || hasRepeated()) return 0
+
+        if (ply >= MAX_PLY) return eval()
     }
 
-    if (depth == 0) return eval()
+    if (depth == 0) return quiescence(alpha, beta, ply)
 
     var bestScore = alpha
     var moveCount = 0
@@ -85,6 +90,39 @@ fun Position.alphabeta(ss: SS, alpha: Score, beta: Score, ply: Int, depth: Int):
     if (moveCount == 0) return when {
         inCheck(stm) -> -(MATE - ply)
         else         -> 0
+    }
+
+    return bestScore
+}
+
+
+@ExperimentalTime
+fun Position.quiescence(alpha_: Int, beta: Int, ply: Int): Score {
+
+    if (STOP || limits.timeUp()) return 0
+
+    val eval = eval()
+
+    if (eval >= beta || ply >= MAX_PLY)
+        return eval
+
+    var alpha = max(alpha_, eval)
+
+    var bestScore = eval
+
+    for (move in genMoves()) {
+
+        if (move.promo() != QUEEN && pieceOn(move.captureSq()) == 0) continue
+        if (!makeMove(move)) continue
+        val score = -quiescence(-beta, -alpha, ply + 1)
+        takeMove()
+
+        if (score > bestScore) {
+            bestScore = score
+
+            if (score >= beta) break
+            if (score > alpha) alpha = score
+        }
     }
 
     return bestScore
