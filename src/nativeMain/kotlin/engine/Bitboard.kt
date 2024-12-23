@@ -10,7 +10,7 @@ val BBrank8 = Bitboard(0xFF00000000000000UL)
 val RankBB = Array(8) { BBrank1 shl (it * NORTH) }
 
 
-data class Bitboard(val bb: ULong) : Iterable<Square> {
+value class Bitboard(val bb: ULong) : Iterable<Square> {
 
     constructor() : this(0UL)
     constructor(sq: Square) : this(1UL shl sq)
