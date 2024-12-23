@@ -1,5 +1,4 @@
 import engine.*
-import engine.Position
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

@@ -2,7 +2,6 @@ import engine.*
 import misc.perft
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.time.ExperimentalTime
 
 
 internal class PerftTest {
