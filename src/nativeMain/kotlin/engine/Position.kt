@@ -127,6 +127,14 @@ class Position() {
     }
 
     override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+
+        other as Position
+
         return toString() == other.toString()
+    }
+
+    override fun hashCode(): Int {
+        return toString().hashCode()
     }
 }
