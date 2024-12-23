@@ -8,8 +8,16 @@ repositories {
 }
 
 kotlin {
-    mingwX64()
-    linuxX64()
+    mingwX64 {
+        binaries {
+            executable()
+        }
+    }
+    linuxX64 {
+        binaries {
+            executable()
+        }
+    }
 
     sourceSets {
         val commonMain by getting {
