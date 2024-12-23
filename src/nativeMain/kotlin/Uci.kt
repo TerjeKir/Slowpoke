@@ -1,17 +1,18 @@
 import engine.*
+import kotlinx.coroutines.*
+import misc.perft
 import search.*
-import kotlin.time.ExperimentalTime
-import kotlin.concurrent.thread
 
 
-@ExperimentalTime
 fun main() {
+    val searchScope = CoroutineScope(Dispatchers.Default)
+
     var pos = Position(STARTFEN)
 
     while (true) {
-        val input = readLine() ?: break
+        val input = readlnOrNull() ?: break
         when (input.substringBefore(' ')) {
-            "go"         -> thread { go(pos, input) }
+            "go"         -> searchScope.go(pos, input)
             "uci"        -> uci()
             "isready"    -> println("readyok")
             "position"   -> pos = position(input)
@@ -32,7 +33,7 @@ fun uci() {
         id name Slowpoke 0.1
         id author Terje Kirstihagen
         uciok
-        """.trimIndent())
+    """.trimIndent())
 }
 
 fun position(str: String): Position {
@@ -57,17 +58,18 @@ fun setOption(str: String) {
 
 }
 
-@ExperimentalTime
 fun printThinking(limits: Limits, depth: Int, score: Score, nodes: ULong, pv: PV) {
     val elapsed = limits.elapsed().inWholeMilliseconds.coerceAtLeast(1)
     val nps = nodes * 1000U / elapsed.toULong()
-    println("info " +
-            "depth $depth " +
-            "score ${score.toUCI()} " +
-            "time $elapsed " +
-            "nodes $nodes " +
-            "nps $nps " +
-            "pv $pv")
+    println(
+        "info " +
+        "depth $depth " +
+        "score ${score.toUCI()} " +
+        "time $elapsed " +
+        "nodes $nodes " +
+        "nps $nps " +
+        "pv $pv"
+    )
 }
 
 fun printConclusion(bm: Move) {

@@ -59,7 +59,7 @@ data class Bitboard(val bb: ULong) : Iterable<Square> {
     infix fun xor(sq: Square): Bitboard = Bitboard(bb xor (1UL shl sq))
     fun inv(): Bitboard = Bitboard(bb.inv())
 
-    // Print bitboards as an 8x8 grid of 0s and 1s
+    // Print bitboards as a grid of 0s and 1s
     override fun toString(): String {
 
         fun Boolean.toInt(): Int = if (this) 1 else 0

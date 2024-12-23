@@ -1,8 +1,10 @@
 package engine
 
+import kotlin.experimental.ExperimentalNativeApi
+
 
 private val PawnAttacks = Array(2) { color -> Array(64) { sq ->
-    pawnBBattackBB(color, Bitboard(sq))
+    pawnBBAttackBB(color, Bitboard(sq))
 }}
 
 private val PseudoAttacks = Array(8) { pt -> Array(64) { sq ->
@@ -24,6 +26,7 @@ fun landingSquareBB(sq: Square, step: Direction): Bitboard {
     return if (onTheBoard) Bitboard(to) else Bitboard()
 }
 
+@OptIn(ExperimentalNativeApi::class)
 fun attackBB(pt: PieceType, sq: Square, occ: Bitboard = Bitboard()): Bitboard {
 
     assert(pt in KNIGHT..KING)
@@ -40,7 +43,7 @@ fun pawnAttackBB(color: Color, sq: Square): Bitboard {
     return PawnAttacks[color][sq]
 }
 
-fun pawnBBattackBB(color: Color, pawns: Bitboard): Bitboard {
+fun pawnBBAttackBB(color: Color, pawns: Bitboard): Bitboard {
     val up = if (color == WHITE) NORTH else SOUTH
     return pawns.shift(up + WEST) or pawns.shift(up + EAST)
 }

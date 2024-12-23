@@ -1,12 +1,10 @@
-@file:Suppress("SpellCheckingInspection")
-
 import engine.*
+import misc.perft
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.time.ExperimentalTime
 
 
-@ExperimentalTime
 internal class PerftTest {
 
     private fun testPerft(depth: Int, fen: String) = perft("perft $depth $fen", false)

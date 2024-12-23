@@ -1,9 +1,9 @@
+package misc
+
 import engine.*
-import kotlin.time.ExperimentalTime
 import kotlin.time.measureTimedValue
 
 
-@ExperimentalTime
 fun perft(input: String, output: Boolean = true): Long {
 
     fun Position.perft(depth: Int): Long {
@@ -33,7 +33,7 @@ fun perft(input: String, output: Boolean = true): Long {
             $time
             ${leaves * 1000L / time.inWholeMilliseconds.coerceAtLeast(1)}nps
             $leaves
-            """.trimIndent())
+        """.trimIndent())
 
     return leaves
 }

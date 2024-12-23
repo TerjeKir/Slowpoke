@@ -2,24 +2,24 @@ package search
 
 import engine.*
 import eval
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import printConclusion
 import printThinking
+import kotlin.concurrent.Volatile
 import kotlin.math.abs
 import kotlin.math.max
-import kotlin.time.ExperimentalTime
 
 
 @Volatile
 var STOP = false
 
-@ExperimentalTime
 private var limits: Limits = Limits()
 
 private const val MAX_PLY = 100
 
 
-@ExperimentalTime
-fun go(pos: Position, str: String) {
+fun CoroutineScope.go(pos: Position, str: String) = launch {
 
     limits = Limits().apply { parse(str, pos.stm) }
     STOP = false
@@ -28,7 +28,6 @@ fun go(pos: Position, str: String) {
     search(pos)
 }
 
-@ExperimentalTime
 fun search(pos: Position) {
 
     val ss = Array(100) { Stack() }
@@ -52,7 +51,6 @@ fun search(pos: Position) {
     printConclusion(bestMove)
 }
 
-@ExperimentalTime
 fun Position.alphabeta(ss: SS, alpha: Score, beta: Score, ply: Int, depth: Int): Score {
 
     val root = ply == 0
@@ -96,7 +94,6 @@ fun Position.alphabeta(ss: SS, alpha: Score, beta: Score, ply: Int, depth: Int):
 }
 
 
-@ExperimentalTime
 fun Position.quiescence(alpha_: Int, beta: Int, ply: Int): Score {
 
     if (STOP || limits.timeUp()) return 0

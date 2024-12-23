@@ -1,5 +1,7 @@
 package engine
 
+import kotlin.experimental.ExperimentalNativeApi
+
 
 private fun Position.togglePiece(piece: Piece, sq: Square) {
     board[sq] = board[sq] xor piece
@@ -76,6 +78,7 @@ fun Position.makeMove(move: Move): Boolean {
     return true
 }
 
+@OptIn(ExperimentalNativeApi::class)
 fun Position.takeMove() {
 
     histPly--

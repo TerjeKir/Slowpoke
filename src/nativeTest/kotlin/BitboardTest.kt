@@ -1,8 +1,10 @@
 import engine.*
+import kotlin.experimental.ExperimentalNativeApi
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 
+@OptIn(ExperimentalNativeApi::class)
 internal class BitboardTest {
 
     private val fullBB = Bitboard(ULong.MAX_VALUE)

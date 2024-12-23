@@ -128,13 +128,10 @@ class Position() {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (javaClass != other?.javaClass) return false
 
         other as Position
 
-        if (toString() != other.toString()) return false
-
-        return true
+        return toString() == other.toString()
     }
 
     override fun hashCode(): Int {
