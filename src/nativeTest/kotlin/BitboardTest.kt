@@ -1,10 +1,11 @@
 import engine.*
 import io.kotest.core.spec.style.FunSpec
-import kotlin.experimental.ExperimentalNativeApi
-import kotlin.test.assertEquals
+import io.kotest.matchers.booleans.shouldBeFalse
+import io.kotest.matchers.booleans.shouldBeTrue
+import io.kotest.matchers.shouldBe
+import kotlin.test.fail
 
 
-@OptIn(ExperimentalNativeApi::class)
 internal class BitboardTest : FunSpec({
 
     val fullBB = Bitboard(ULong.MAX_VALUE)
@@ -15,60 +16,60 @@ internal class BitboardTest : FunSpec({
     )
 
     test("isEmpty") {
-        assert(emptyBB.isEmpty())
-        assert(!Bitboard(A1).isEmpty())
+        emptyBB.isEmpty().shouldBeTrue()
+        Bitboard(A1).isEmpty().shouldBeFalse()
     }
 
     test("notEmpty") {
-        assert(!emptyBB.nonEmpty())
-        assert(Bitboard(A1).nonEmpty())
+        emptyBB.nonEmpty().shouldBeFalse()
+        Bitboard(A1).nonEmpty().shouldBeTrue()
     }
 
     test("lsb") {
-        assertEquals(A1, Bitboard(A1).lsb())
-        assertEquals(C8, Bitboard(C8).lsb())
+        Bitboard(A1).lsb() shouldBe A1
+        Bitboard(C8).lsb() shouldBe C8
     }
 
     test("popcnt") {
-        assertEquals(0, emptyBB.popcnt())
-        assertEquals(32, startBB.popcnt())
-        assertEquals(3, Bitboard(A2, B5, H1).popcnt())
-        assertEquals(8, Bitboard(*(E4..D5).toList().toIntArray()).popcnt())
+        emptyBB.popcnt() shouldBe 0
+        startBB.popcnt() shouldBe 32
+        Bitboard(A2, B5, H1).popcnt() shouldBe 3
+        Bitboard(*(E4..D5).toList().toIntArray()).popcnt() shouldBe 8
     }
 
     test("shift") {
-        assert(emptyBB.shift(8).isEmpty())
+        emptyBB.shift(8).isEmpty().shouldBeTrue()
         // Basic move
-        assertEquals(Bitboard(B1), Bitboard(A1).shift(1))
-        assertEquals(Bitboard(A1), Bitboard(B1).shift(-1))
+        Bitboard(A1).shift(EAST) shouldBe Bitboard(B1)
+        Bitboard(B1).shift(WEST) shouldBe Bitboard(A1)
         // Moves off the board
-        assertEquals(emptyBB, Bitboard(H1).shift(1))
-        assertEquals(emptyBB, Bitboard(A1).shift(7))
+        Bitboard(H1).shift(EAST) shouldBe emptyBB
+        Bitboard(A1).shift(NORTH+WEST) shouldBe emptyBB
     }
 
     test("iterator") {
-        assertEquals(32, startBB.fold(0) { count, _ -> count + 1 })
-        assertEquals(2, Bitboard(F1, G8).fold(0) { count, _ -> count + 1 })
+        startBB.fold(0) { count, _ -> count + 1 } shouldBe 32
+        Bitboard(F1, G8).fold(0) { count, _ -> count + 1 } shouldBe 2
 
         for (sq in emptyBB) {
-            assert(false)
+            fail("Should not get here")
         }
     }
 
     test("operators") {
-        assertEquals(Bitboard(D4), Bitboard(C4) shl 1)
-        assertEquals(Bitboard(B4), Bitboard(C4) shr 1)
+        Bitboard(C4) shl 1 shouldBe Bitboard(D4)
+        Bitboard(C4) shr 1 shouldBe Bitboard(B4)
 
-        assertEquals(emptyBB, emptyBB and startBB)
-        assertEquals(startBB, startBB and startBB)
+        emptyBB and startBB shouldBe emptyBB
+        startBB and startBB shouldBe startBB
 
-        assertEquals(startBB, emptyBB or startBB)
-        assertEquals(startBB, startBB or startBB)
+        emptyBB or startBB shouldBe startBB
+        startBB or startBB shouldBe startBB
 
-        assertEquals(startBB, emptyBB xor startBB)
-        assertEquals(emptyBB, startBB xor startBB)
+        emptyBB xor startBB shouldBe startBB
+        startBB xor startBB shouldBe emptyBB
 
-        assertEquals(fullBB, emptyBB.inv())
-        assertEquals(emptyBB, fullBB.inv())
+        emptyBB.inv() shouldBe fullBB
+        fullBB.inv() shouldBe emptyBB
     }
 })
