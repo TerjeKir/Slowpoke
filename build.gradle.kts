@@ -1,27 +1,31 @@
 plugins {
-    kotlin("jvm") version "1.5.0"
+    alias(libs.plugins.kotlin.multiplatform)
+    alias(libs.plugins.kotest.multiplatform)
 }
-
-group = "me.terje"
-version = "0.1-SNAPSHOT"
 
 repositories {
     mavenCentral()
 }
 
-dependencies {
-    testImplementation(kotlin("test-junit"))
-}
+kotlin {
+    mingwX64()
+    linuxX64()
 
-tasks.test {
-    useJUnit()
-}
+    sourceSets {
+        val commonMain by getting {
+            dependencies {
+                implementation(libs.kotlinx.coroutines.core)
+            }
+        }
 
-tasks.jar {
-    manifest {
-        attributes["Main-Class"] = "UciKt"
-    }
-    configurations["compileClasspath"].forEach { file: File ->
-        from(zipTree(file.absoluteFile))
+        val commonTest by getting {
+            dependencies {
+                implementation(libs.kotest.assertions.core)
+                implementation(libs.kotest.framework.engine)
+                implementation(libs.kotest.framework.datatest)
+                implementation(kotlin("test-common"))
+                implementation(kotlin("test-annotations-common"))
+            }
+        }
     }
 }
