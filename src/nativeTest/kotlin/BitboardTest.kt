@@ -1,47 +1,42 @@
 import engine.*
+import io.kotest.core.spec.style.FunSpec
 import kotlin.experimental.ExperimentalNativeApi
-import kotlin.test.Test
 import kotlin.test.assertEquals
 
 
 @OptIn(ExperimentalNativeApi::class)
-internal class BitboardTest {
+internal class BitboardTest : FunSpec({
 
-    private val fullBB = Bitboard(ULong.MAX_VALUE)
-    private val emptyBB = Bitboard()
-    private val startBB = Bitboard(
+    val fullBB = Bitboard(ULong.MAX_VALUE)
+    val emptyBB = Bitboard()
+    val startBB = Bitboard(
         *(A1..H2).toList().toIntArray(),
         *(A7..H8).toList().toIntArray()
     )
 
-    @Test
-    fun isEmpty() {
+    test("isEmpty") {
         assert(emptyBB.isEmpty())
         assert(!Bitboard(A1).isEmpty())
     }
 
-    @Test
-    fun notEmpty() {
+    test("notEmpty") {
         assert(!emptyBB.nonEmpty())
         assert(Bitboard(A1).nonEmpty())
     }
 
-    @Test
-    fun lsb() {
+    test("lsb") {
         assertEquals(A1, Bitboard(A1).lsb())
         assertEquals(C8, Bitboard(C8).lsb())
     }
 
-    @Test
-    fun popcnt() {
+    test("popcnt") {
         assertEquals(0, emptyBB.popcnt())
         assertEquals(32, startBB.popcnt())
         assertEquals(3, Bitboard(A2, B5, H1).popcnt())
         assertEquals(8, Bitboard(*(E4..D5).toList().toIntArray()).popcnt())
     }
 
-    @Test
-    fun shift() {
+    test("shift") {
         assert(emptyBB.shift(8).isEmpty())
         // Basic move
         assertEquals(Bitboard(B1), Bitboard(A1).shift(1))
@@ -51,8 +46,7 @@ internal class BitboardTest {
         assertEquals(emptyBB, Bitboard(A1).shift(7))
     }
 
-    @Test
-    fun iterator() {
+    test("iterator") {
         assertEquals(32, startBB.fold(0) { count, _ -> count + 1 })
         assertEquals(2, Bitboard(F1, G8).fold(0) { count, _ -> count + 1 })
 
@@ -61,8 +55,7 @@ internal class BitboardTest {
         }
     }
 
-    @Test
-    fun operators() {
+    test("operators") {
         assertEquals(Bitboard(D4), Bitboard(C4) shl 1)
         assertEquals(Bitboard(B4), Bitboard(C4) shr 1)
 
@@ -78,4 +71,4 @@ internal class BitboardTest {
         assertEquals(fullBB, emptyBB.inv())
         assertEquals(emptyBB, fullBB.inv())
     }
-}
+})

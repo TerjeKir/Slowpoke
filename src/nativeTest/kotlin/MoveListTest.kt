@@ -1,14 +1,13 @@
 import engine.*
+import io.kotest.core.spec.style.FunSpec
 import kotlin.experimental.ExperimentalNativeApi
-import kotlin.test.Test
 import kotlin.test.assertEquals
 
 
 @OptIn(ExperimentalNativeApi::class)
-internal class MoveListTest {
+internal class MoveListTest : FunSpec({
 
-    @Test
-    fun test() {
+    test("MoveList") {
         val ml = MoveList().apply {
             add(Move(B1, C3))
             add(Move(B2, C4))
@@ -21,4 +20,4 @@ internal class MoveListTest {
             assertEquals(C3 - B1, move.to() - move.from())
         }
     }
-}
+})
