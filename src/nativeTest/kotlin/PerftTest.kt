@@ -1,7 +1,7 @@
 import engine.*
 import io.kotest.core.spec.style.FunSpec
+import io.kotest.matchers.shouldBe
 import misc.perft
-import kotlin.test.assertEquals
 
 
 internal class PerftTest : FunSpec({
@@ -9,15 +9,15 @@ internal class PerftTest : FunSpec({
     fun testPerft(depth: Int, fen: String) = perft("perft $depth $fen", false)
 
     test("kiwipete") {
-        assertEquals(     48, testPerft(1, KIWIPETE))
-        assertEquals(   2039, perft("perft 2", false))
-        assertEquals(  97862, perft("perft 3", false))
-        assertEquals(4085603, perft("perft", false))
+        testPerft(1, KIWIPETE) shouldBe      48
+        testPerft(2, KIWIPETE) shouldBe    2039
+        testPerft(3, KIWIPETE) shouldBe   97862
+        testPerft(4, KIWIPETE) shouldBe 4085603
     }
 
     test("startfen") {
-        assertEquals(   20, testPerft(1, STARTFEN))
-        assertEquals(  400, testPerft(2, STARTFEN))
-        assertEquals( 8902, testPerft(3, STARTFEN))
+        testPerft(1, STARTFEN) shouldBe   20
+        testPerft(2, STARTFEN) shouldBe  400
+        testPerft(3, STARTFEN) shouldBe 8902
     }
 })

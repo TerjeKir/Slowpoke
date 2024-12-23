@@ -1,6 +1,6 @@
 import engine.*
 import io.kotest.core.spec.style.FunSpec
-import kotlin.test.assertEquals
+import io.kotest.matchers.shouldBe
 
 
 internal class MovegenTest : FunSpec({
@@ -9,8 +9,8 @@ internal class MovegenTest : FunSpec({
     val enpas = "rnbqkbnr/1pp1pppp/p7/3pP3/8/8/PPPP1PPP/RNBQKBNR w KQkq d6 0 3"
 
     test("genMoves") {
-        assertEquals(20, Position(STARTFEN).genMoves().size)
-        assertEquals(48, Position(KIWIPETE).genMoves().size)
-        assertEquals(31, Position(enpas).genMoves().size)
+        Position(STARTFEN).genMoves().size shouldBe 20
+        Position(KIWIPETE).genMoves().size shouldBe 48
+        Position(enpas).genMoves().size shouldBe 31
     }
 })

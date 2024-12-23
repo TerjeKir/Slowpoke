@@ -1,6 +1,6 @@
 import engine.*
 import io.kotest.core.spec.style.FunSpec
-import kotlin.test.assertEquals
+import io.kotest.matchers.shouldBe
 
 
 internal class EvalTest : FunSpec({
@@ -9,7 +9,7 @@ internal class EvalTest : FunSpec({
     val kiwipete = Position(KIWIPETE)
 
     test("eval") {
-        assertEquals(0, startPos.eval())
-        assertEquals(0, kiwipete.eval())
+        startPos.eval() shouldBe 0
+        kiwipete.eval() shouldBe 0
     }
 })

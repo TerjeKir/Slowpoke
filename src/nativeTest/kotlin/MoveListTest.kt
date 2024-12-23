@@ -1,10 +1,9 @@
 import engine.*
 import io.kotest.core.spec.style.FunSpec
-import kotlin.experimental.ExperimentalNativeApi
-import kotlin.test.assertEquals
+import io.kotest.matchers.ints.shouldBeInRange
+import io.kotest.matchers.shouldBe
 
 
-@OptIn(ExperimentalNativeApi::class)
 internal class MoveListTest : FunSpec({
 
     test("MoveList") {
@@ -15,9 +14,9 @@ internal class MoveListTest : FunSpec({
             add(Move(B4, C6))
         }
         for (move in ml) {
-            assert(move.from() in B1..B4)
-            assert(move.to() in C3..C6)
-            assertEquals(C3 - B1, move.to() - move.from())
+            move.from() shouldBeInRange B1..B4
+            move.to() shouldBeInRange C3..C6
+            move.to() - move.from() shouldBe C3 - B1
         }
     }
 })
