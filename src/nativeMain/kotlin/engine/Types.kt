@@ -68,27 +68,44 @@ val CastlePerm = intArrayOf(
      7, 15, 15, 15,  3, 15, 15, 11,
 )
 
-typealias Rank = Int
-fun Square.rank() = this shr 3
-fun Char.toRank(): Int = code - '1'.code
-fun Rank.rankToChar(): Char = (this + '1'.code).toChar()
-fun Rank.relative(c: Color): Rank = if (c == WHITE) this else RANK_8 - this
-const val RANK_1 = 0
-const val RANK_4 = 3
-const val RANK_8 = 7
+value class Rank(val rank: Int) {
+    val absoluteValue: Int
+        get() = rank.absoluteValue
 
-typealias File = Int
-fun Square.file() = this and 7
-fun Char.toFile(): Int = code - 'a'.code
-fun File.fileToChar(): Char = (this + 'a'.code).toChar()
-const val FILE_A = 0
-const val FILE_H = 7
+    fun toChar(): Char = (rank + '1'.code).toChar()
+    fun relative(c: Color): Rank = if (c == WHITE) this else RANK_8 - this
+
+    operator fun plus(other: Rank): Rank = Rank(this.rank + other.rank)
+    operator fun minus(other: Rank): Rank = Rank(this.rank - other.rank)
+
+    infix fun downTo(other: Rank) = (this.rank downTo other.rank).map { Rank(it) }
+}
+fun Square.rank(): Rank = Rank(this shr 3)
+fun Char.toRank(): Rank = Rank(code - '1'.code)
+val RANK_1 = Rank(0)
+val RANK_4 = Rank(3)
+val RANK_8 = Rank(7)
+
+value class File(val file: Int) {
+    val absoluteValue: Int
+        get() = file.absoluteValue
+
+    fun toChar(): Char = (file + 'a'.code).toChar()
+
+    operator fun plus(other: File): File = File(this.file + other.file)
+    operator fun minus(other: File): File = File(this.file - other.file)
+    operator fun rangeTo(other: File) = (this.file..other.file).map { File(it) }
+}
+fun Square.file(): File = File(this and 7)
+fun Char.toFile(): File = File(code - 'a'.code)
+val FILE_A = File(0)
+val FILE_H = File(7)
 
 typealias Square = Int
-fun makeSquare(rank: Int, file: Int) = rank * 8 + file
+fun makeSquare(rank: Rank, file: File) = rank.rank * 8 + file.file
 fun Square.isValidSquare(): Boolean = this in A1..H8
 fun Square.distanceTo(sq: Square): Int = Distance[this][sq]
-fun Square.toSquareString(): String = "${this.file().fileToChar()}${this.rank().rankToChar()}"
+fun Square.toSquareString(): String = "${this.file().toChar()}${this.rank().toChar()}"
 fun String.toSquare(): Square = makeSquare(this[1].toRank(), this[0].toFile())
 val Distance = Array(64) { sq1 ->
     Array(64) { sq2 ->

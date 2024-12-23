@@ -9,6 +9,9 @@ val BBrank1 = Bitboard(0x00000000000000FFUL)
 val BBrank8 = Bitboard(0xFF00000000000000UL)
 val RankBB = Array(8) { BBrank1 shl (it * NORTH) }
 
+operator fun Array<Bitboard>.get(rank: Rank) = this[rank.rank]
+operator fun Array<Bitboard>.get(file: File) = this[file.file]
+
 
 value class Bitboard(val bb: ULong) : Iterable<Square> {
 
