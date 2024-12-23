@@ -1,7 +1,11 @@
 import engine.*
-import kotlinx.coroutines.*
 import misc.perft
-import search.*
+import search.Limits
+import search.PV
+import search.STOP
+import search.go
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 
 
 fun main() {

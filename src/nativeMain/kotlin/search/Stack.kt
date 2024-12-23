@@ -23,7 +23,7 @@ class PV {
     private fun append(other: PV) {
         len = 1 + other.len
         for (i in 0..other.len)
-            moves[i+1] = other.moves[i]
+            moves[i + 1] = other.moves[i]
     }
 
     override fun toString(): String {
