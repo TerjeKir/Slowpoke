@@ -46,14 +46,15 @@ class Magic(
     val attacks: Array<Bitboard>,
     private val mask: Bitboard,
     private val magic: ULong,
-    private val shift: Int) {
+    private val shift: Int
+) {
 
     fun index(occ: Bitboard) = (((occ and mask).bb * magic) shr shift).toInt()
     fun attackBB(occ: Bitboard) = attacks[index(occ)]
 }
 
 fun initMagics(pt: PieceType, sq: Square): Magic {
-    val (magic, steps) = when(pt) {
+    val (magic, steps) = when (pt) {
         ROOK -> Pair(MagicRNumbers, intArrayOf(8, 1, -8, -1))
         else -> Pair(MagicBNumbers, intArrayOf(7, 9, -7, -9))
     }

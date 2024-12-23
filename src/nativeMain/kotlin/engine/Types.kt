@@ -90,11 +90,13 @@ fun Square.isValidSquare(): Boolean = this in A1..H8
 fun Square.distanceTo(sq: Square): Int = Distance[this][sq]
 fun Square.toSquareString(): String = "${this.file().fileToChar()}${this.rank().rankToChar()}"
 fun String.toSquare(): Square = makeSquare(this[1].toRank(), this[0].toFile())
-val Distance = Array(64) { sq1 -> Array(64) { sq2 ->
-    val vertical = (sq1.file() - sq2.file()).absoluteValue
-    val horizontal = (sq1.rank() - sq2.rank()).absoluteValue
-    max(vertical, horizontal)
-}}
+val Distance = Array(64) { sq1 ->
+    Array(64) { sq2 ->
+        val vertical = (sq1.file() - sq2.file()).absoluteValue
+        val horizontal = (sq1.rank() - sq2.rank()).absoluteValue
+        max(vertical, horizontal)
+    }
+}
 const val A1: Square = 0
 const val B1: Square = 1
 const val C1: Square = 2

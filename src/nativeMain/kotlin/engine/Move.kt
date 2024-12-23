@@ -3,6 +3,7 @@ package engine
 
 typealias Move = Short
 typealias MoveType = Int
+
 const val NORMAL = 0
 const val PROMO  = 1 shl 14
 const val ENPAS  = 2 shl 14

@@ -9,8 +9,10 @@ internal class BitboardTest {
 
     private val fullBB = Bitboard(ULong.MAX_VALUE)
     private val emptyBB = Bitboard()
-    private val startBB = Bitboard(*(A1..H2).toList().toIntArray(),
-                                   *(A7..H8).toList().toIntArray())
+    private val startBB = Bitboard(
+        *(A1..H2).toList().toIntArray(),
+        *(A7..H8).toList().toIntArray()
+    )
 
     @Test
     fun isEmpty() {

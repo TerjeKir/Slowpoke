@@ -120,10 +120,10 @@ class Position() {
         val occ = colorBB[WHITE] or colorBB[BLACK]
 
         return (pawnAttackBB(c xor 1, sq) and pieces(c, PAWN)).nonEmpty()
-        || (attackBB(KNIGHT, sq) and pieces(c, KNIGHT)).nonEmpty()
-        || (attackBB(KING,   sq) and pieces(c, KING)).nonEmpty()
-        || (attackBB(BISHOP, sq, occ) and bishops).nonEmpty()
-        || (attackBB(ROOK,   sq, occ) and rooks).nonEmpty()
+            || (attackBB(KNIGHT, sq) and pieces(c, KNIGHT)).nonEmpty()
+            || (attackBB(KING,   sq) and pieces(c, KING)).nonEmpty()
+            || (attackBB(BISHOP, sq, occ) and bishops).nonEmpty()
+            || (attackBB(ROOK,   sq, occ) and rooks).nonEmpty()
     }
 
     override fun equals(other: Any?): Boolean {
