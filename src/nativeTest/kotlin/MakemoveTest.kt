@@ -1,22 +1,20 @@
 @file:Suppress("SpellCheckingInspection")
 
 import engine.*
-import kotlin.test.Test
+import io.kotest.core.spec.style.FunSpec
 import kotlin.test.assertEquals
 
 
-internal class MakemoveTest {
+internal class MakemoveTest : FunSpec({
 
-    @Test
-    fun makeMoveBasic() {
+    test("makeMoveBasic") {
         assertEquals(
             Position("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1"),
             Position(STARTFEN).apply { makeMove(Move(E2, E4)) }
         )
     }
 
-    @Test
-    fun takeMoveBasic() {
+    test("takeMoveBasic") {
         assertEquals(
             Position(STARTFEN),
             Position(STARTFEN).apply {
@@ -26,8 +24,7 @@ internal class MakemoveTest {
         )
     }
 
-    @Test
-    fun makeMoveCapture() {
+    test("makeMoveCapture") {
         assertEquals(
             Position("rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2"),
             Position(STARTFEN).apply {
@@ -38,8 +35,7 @@ internal class MakemoveTest {
         )
     }
 
-    @Test
-    fun takeMoveCapture() {
+    test("takeMoveCapture") {
         assertEquals(
             Position(STARTFEN),
             Position(STARTFEN).apply {
@@ -53,8 +49,7 @@ internal class MakemoveTest {
         )
     }
 
-    @Test
-    fun makeMoveEnpas() {
+    test("makeMoveEnpas") {
         assertEquals(
             Position("rnbqkbnr/1pp1pppp/p2P4/8/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 3"),
             Position(STARTFEN).apply {
@@ -67,8 +62,7 @@ internal class MakemoveTest {
         )
     }
 
-    @Test
-    fun takeMoveEnpas() {
+    test("takeMoveEnpas") {
         assertEquals(
             Position(STARTFEN),
             Position(STARTFEN).apply {
@@ -86,8 +80,7 @@ internal class MakemoveTest {
         )
     }
 
-    @Test
-    fun makeMoveCastle() {
+    test("makeMoveCastle") {
         assertEquals(
             Position("1nbqkbnr/1ppppppp/8/1p6/4P3/5N2/rPPP1PPP/RNBQ1RK1 b k - 1 4"),
             Position(STARTFEN).apply {
@@ -102,8 +95,7 @@ internal class MakemoveTest {
         )
     }
 
-    @Test
-    fun takeMoveCastle() {
+    test("takeMoveCastle") {
         assertEquals(
             Position(STARTFEN),
             Position(STARTFEN).apply {
@@ -125,8 +117,7 @@ internal class MakemoveTest {
         )
     }
 
-    @Test
-    fun makeMovePromo() {
+    test("makeMovePromo") {
         assertEquals(
             Position("rnbqkbnQ/1ppppp1p/8/8/8/8/P1PPPPP1/RNqQKBNR w KQq - 0 6"),
             Position(STARTFEN).apply {
@@ -144,8 +135,7 @@ internal class MakemoveTest {
         )
     }
 
-    @Test
-    fun takeMovePromo() {
+    test("takeMovePromo") {
         assertEquals(
             Position(STARTFEN),
             Position(STARTFEN).apply {
@@ -172,4 +162,4 @@ internal class MakemoveTest {
             }
         )
     }
-}
+})

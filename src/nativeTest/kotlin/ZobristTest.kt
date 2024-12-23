@@ -1,17 +1,16 @@
 import engine.*
+import io.kotest.core.spec.style.FunSpec
 import kotlin.experimental.ExperimentalNativeApi
-import kotlin.test.Test
 import kotlin.test.assertEquals
 
 
 @OptIn(ExperimentalNativeApi::class)
-internal class ZobristTest {
+internal class ZobristTest : FunSpec({
 
-    private val startPos = Position(STARTFEN)
-    private val kiwipete = Position(KIWIPETE)
+    val startPos = Position(STARTFEN)
+    val kiwipete = Position(KIWIPETE)
 
-    @Test
-    fun hasRepeated() {
+    test("hasRepeated") {
         assert(startPos.apply {
             makeMove(Move(G1, F3))
             makeMove(Move(G8, F6))
@@ -29,8 +28,7 @@ internal class ZobristTest {
         }.hasRepeated())
     }
 
-    @Test
-    fun key() {
+    test("key") {
         fun Position.makeKey(): Key {
             var key: Key = 0
             for (sq in A1..H8)
@@ -43,4 +41,4 @@ internal class ZobristTest {
         assertEquals(startPos.key, startPos.makeKey())
         assertEquals(kiwipete.key, kiwipete.makeKey())
     }
-}
+})

@@ -1,12 +1,11 @@
 import engine.*
-import kotlin.test.Test
+import io.kotest.core.spec.style.FunSpec
 import kotlin.test.assertEquals
 
 
-internal class MoveTest {
+internal class MoveTest : FunSpec({
 
-    @Test
-    fun toUCI() {
+    test("toUCI") {
         assertEquals("b1c3",  Move(B1, C3).toUCI())
         assertEquals("a5b6",  Move(A5, B6, ENPAS).toUCI())
         assertEquals("a7a8n", Move(A7, A8, PROMO, KNIGHT).toUCI())
@@ -14,29 +13,25 @@ internal class MoveTest {
         assertEquals("e1g1",  Move(E1, G1, CASTLE).toUCI())
     }
 
-    @Test
-    fun from() {
+    test("from") {
         assertEquals(A1, Move(A1, A2).from())
     }
 
-    @Test
-    fun to() {
+    test("to") {
         assertEquals(A2, Move(A1, A2).to())
     }
 
-    @Test
-    fun type() {
+    test("type") {
         assertEquals(NORMAL, Move(A1, A2).type())
         assertEquals(ENPAS,  Move(A5, B6, ENPAS).type())
         assertEquals(CASTLE, Move(E1, C1, CASTLE).type())
         assertEquals(PROMO,  Move(A7, B8, PROMO, QUEEN).type())
     }
 
-    @Test
-    fun promo() {
+    test("promo") {
         assertEquals(KNIGHT, Move(A7, B8, PROMO, KNIGHT).promo())
         assertEquals(BISHOP, Move(A7, B8, PROMO, BISHOP).promo())
         assertEquals(ROOK,   Move(A7, B8, PROMO, ROOK).promo())
         assertEquals(QUEEN,  Move(A7, B8, PROMO, QUEEN).promo())
     }
-}
+})

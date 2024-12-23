@@ -1,16 +1,15 @@
 import engine.*
-import kotlin.test.Test
+import io.kotest.core.spec.style.FunSpec
 import kotlin.test.assertEquals
 
 
-internal class EvalTest {
+internal class EvalTest : FunSpec({
 
-    private val startPos = Position(STARTFEN)
-    private val kiwipete = Position(KIWIPETE)
+    val startPos = Position(STARTFEN)
+    val kiwipete = Position(KIWIPETE)
 
-    @Test
-    fun eval() {
+    test("eval") {
         assertEquals(0, startPos.eval())
         assertEquals(0, kiwipete.eval())
     }
-}
+})
