@@ -69,6 +69,9 @@ val CastlePerm = intArrayOf(
 )
 
 value class Rank(val rank: Int) {
+    val absoluteValue: Int
+        get() = rank.absoluteValue
+
     fun toChar(): Char = (rank + '1'.code).toChar()
     fun relative(c: Color): Rank = if (c == WHITE) this else RANK_8 - this
 
@@ -84,6 +87,9 @@ val RANK_4 = Rank(3)
 val RANK_8 = Rank(7)
 
 value class File(val file: Int) {
+    val absoluteValue: Int
+        get() = file.absoluteValue
+
     fun toChar(): Char = (file + 'a'.code).toChar()
 
     operator fun plus(other: File): File = File(this.file + other.file)
@@ -103,8 +109,8 @@ fun Square.toSquareString(): String = "${this.file().toChar()}${this.rank().toCh
 fun String.toSquare(): Square = makeSquare(this[1].toRank(), this[0].toFile())
 val Distance = Array(64) { sq1 ->
     Array(64) { sq2 ->
-        val vertical = (sq1.file() - sq2.file()).file.absoluteValue
-        val horizontal = (sq1.rank() - sq2.rank()).rank.absoluteValue
+        val vertical = (sq1.file() - sq2.file()).absoluteValue
+        val horizontal = (sq1.rank() - sq2.rank()).absoluteValue
         max(vertical, horizontal)
     }
 }
