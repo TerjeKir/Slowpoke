@@ -5,7 +5,7 @@ class Position() {
 
     class History {
         var key: Key = Key.zero()
-        var move: Move = 0
+        var move: Move = Move.noMove()
         var cr: CastlingRight = 0
         var ep: Square = 0
         var mr50: Int = 0
