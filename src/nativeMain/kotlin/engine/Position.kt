@@ -4,7 +4,7 @@ package engine
 class Position() {
 
     class History {
-        var key: Key = 0
+        var key: Key = Key.zero()
         var move: Move = 0
         var cr: CastlingRight = 0
         var ep: Square = 0
@@ -16,7 +16,7 @@ class Position() {
     var colorBB: Array<Bitboard> = Array(2) { Bitboard() }
     var board: Array<Piece> = Array(64) { 0 }
 
-    var key: Key = 0
+    var key: Key = Key.zero()
 
     var stm: Color = WHITE
     var cr: CastlingRight = 0
