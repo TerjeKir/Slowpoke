@@ -31,15 +31,12 @@ fun CoroutineScope.go(pos: Position, str: String) = launch {
 fun search(pos: Position) {
 
     val ss = Array(100) { Stack() }
-    var bestMove = Move(A1, A1)
 
     for (depth in 1..limits.getDepth()) {
 
         val score = pos.alphabeta(ss, -INF, INF, 0, depth)
 
         if (STOP || limits.timeUp()) break
-
-        bestMove = ss[0].pv.moves[0]
 
         printThinking(limits, depth, score, pos.nodeCount, ss[0].pv)
 
@@ -48,7 +45,7 @@ fun search(pos: Position) {
 
     while (limits.isInfinite() && !STOP) { /* Wait for stop */ }
 
-    printConclusion(bestMove)
+    printConclusion(ss[0].pv[0])
 }
 
 fun Position.alphabeta(ss: SS, alpha: Score, beta: Score, ply: Int, depth: Int): Score {

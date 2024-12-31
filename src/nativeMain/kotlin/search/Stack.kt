@@ -9,27 +9,19 @@ class Stack {
     val pv = PV()
 }
 
-class PV {
-    var len = 0
-    var moves = ShortArray(100)
+value class PV(private val pv: MutableList<Move>) {
 
-    fun clear() { len = 0 }
+    constructor() : this(mutableListOf())
 
-    fun build(move: Move, pv: PV) {
-        moves[0] = move
-        append(pv)
+    fun clear() = pv.clear()
+
+    fun build(move: Move, continuation: PV) {
+        pv.clear()
+        pv.add(move)
+        pv.addAll(continuation.pv)
     }
 
-    private fun append(other: PV) {
-        len = 1 + other.len
-        for (i in 0..other.len)
-            moves[i + 1] = other.moves[i]
-    }
+    operator fun get(i: Int) = pv[i]
 
-    override fun toString(): String {
-        val res = StringBuilder()
-        for (i in 0 until len)
-            res.append(moves[i].toUCI() + " ")
-        return res.dropLast(1).toString()
-    }
+    override fun toString() = pv.joinToString(" ") { it.toUCI() }
 }
