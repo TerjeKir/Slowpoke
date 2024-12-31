@@ -29,7 +29,7 @@ internal class ZobristTest : FunSpec({
 
     test("key") {
         fun Position.makeKey(): Key {
-            var key: Key = 0
+            var key: Key = Key.zero()
             for (sq in A1..H8)
                 if (pieceOn(sq) != 0) key = key xor PieceKeys[pieceOn(sq)][sq]
             if (stm == WHITE) key = key xor SideKey
