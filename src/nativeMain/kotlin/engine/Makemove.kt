@@ -56,14 +56,14 @@ fun Position.makeMove(move: Move): Boolean {
             key = key xor PieceKeys[0][ep]
         } else if (move.type() == PROMO) {
             togglePiece(pieceOn(to), to)
-            togglePiece(makePiece(stm, move.promo()), to)
+            togglePiece(Piece(stm, move.promo()), to)
         }
     } else if (move.type() == CASTLE)
         when (to) {
-            G1 -> movePiece(makePiece(WHITE, ROOK), H1, F1)
-            C1 -> movePiece(makePiece(WHITE, ROOK), A1, D1)
-            G8 -> movePiece(makePiece(BLACK, ROOK), H8, F8)
-            C8 -> movePiece(makePiece(BLACK, ROOK), A8, D8)
+            G1 -> movePiece(Piece(WHITE, ROOK), H1, F1)
+            C1 -> movePiece(Piece(WHITE, ROOK), A1, D1)
+            G8 -> movePiece(Piece(BLACK, ROOK), H8, F8)
+            C8 -> movePiece(Piece(BLACK, ROOK), A8, D8)
         }
 
     key = key xor SideKey
@@ -94,10 +94,10 @@ fun Position.takeMove() {
     if (move.type() == CASTLE) {
         assert(mover.type == KING)
         when (to) {
-            G1 -> movePiece(makePiece(WHITE, ROOK), F1, H1)
-            C1 -> movePiece(makePiece(WHITE, ROOK), D1, A1)
-            G8 -> movePiece(makePiece(BLACK, ROOK), F8, H8)
-            C8 -> movePiece(makePiece(BLACK, ROOK), D8, A8)
+            G1 -> movePiece(Piece(WHITE, ROOK), F1, H1)
+            C1 -> movePiece(Piece(WHITE, ROOK), D1, A1)
+            G8 -> movePiece(Piece(BLACK, ROOK), F8, H8)
+            C8 -> movePiece(Piece(BLACK, ROOK), D8, A8)
         }
     }
 
@@ -114,7 +114,7 @@ fun Position.takeMove() {
     if (move.type() == PROMO) {
         assert(mover.type != PAWN && mover.type != KING)
         togglePiece(mover, from)
-        togglePiece(makePiece(stm, PAWN), from)
+        togglePiece(Piece(stm, PAWN), from)
     }
 
     key  = history(0).key

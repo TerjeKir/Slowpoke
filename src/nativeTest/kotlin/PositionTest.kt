@@ -34,29 +34,29 @@ internal class PositionTest : FunSpec({
         startPos.apply {
 
             for (sq in A2..H2) {
-                makePiece(WHITE, PAWN) shouldBe pieceOn(sq)
+                Piece(WHITE, PAWN) shouldBe pieceOn(sq)
             }
             for (sq in A7..H7) {
-                makePiece(BLACK, PAWN) shouldBe pieceOn(sq)
+                Piece(BLACK, PAWN) shouldBe pieceOn(sq)
             }
 
-            makePiece(WHITE,   ROOK) shouldBe pieceOn(A1)
-            makePiece(WHITE, KNIGHT) shouldBe pieceOn(B1)
-            makePiece(WHITE, BISHOP) shouldBe pieceOn(C1)
-            makePiece(WHITE,  QUEEN) shouldBe pieceOn(D1)
-            makePiece(WHITE,   KING) shouldBe pieceOn(E1)
-            makePiece(WHITE, BISHOP) shouldBe pieceOn(F1)
-            makePiece(WHITE, KNIGHT) shouldBe pieceOn(G1)
-            makePiece(WHITE,   ROOK) shouldBe pieceOn(H1)
+            Piece(WHITE,   ROOK) shouldBe pieceOn(A1)
+            Piece(WHITE, KNIGHT) shouldBe pieceOn(B1)
+            Piece(WHITE, BISHOP) shouldBe pieceOn(C1)
+            Piece(WHITE,  QUEEN) shouldBe pieceOn(D1)
+            Piece(WHITE,   KING) shouldBe pieceOn(E1)
+            Piece(WHITE, BISHOP) shouldBe pieceOn(F1)
+            Piece(WHITE, KNIGHT) shouldBe pieceOn(G1)
+            Piece(WHITE,   ROOK) shouldBe pieceOn(H1)
 
-            makePiece(BLACK,   ROOK) shouldBe pieceOn(A8)
-            makePiece(BLACK, KNIGHT) shouldBe pieceOn(B8)
-            makePiece(BLACK, BISHOP) shouldBe pieceOn(C8)
-            makePiece(BLACK,  QUEEN) shouldBe pieceOn(D8)
-            makePiece(BLACK,   KING) shouldBe pieceOn(E8)
-            makePiece(BLACK, BISHOP) shouldBe pieceOn(F8)
-            makePiece(BLACK, KNIGHT) shouldBe pieceOn(G8)
-            makePiece(BLACK,   ROOK) shouldBe pieceOn(H8)
+            Piece(BLACK,   ROOK) shouldBe pieceOn(A8)
+            Piece(BLACK, KNIGHT) shouldBe pieceOn(B8)
+            Piece(BLACK, BISHOP) shouldBe pieceOn(C8)
+            Piece(BLACK,  QUEEN) shouldBe pieceOn(D8)
+            Piece(BLACK,   KING) shouldBe pieceOn(E8)
+            Piece(BLACK, BISHOP) shouldBe pieceOn(F8)
+            Piece(BLACK, KNIGHT) shouldBe pieceOn(G8)
+            Piece(BLACK,   ROOK) shouldBe pieceOn(H8)
         }
     }
 
