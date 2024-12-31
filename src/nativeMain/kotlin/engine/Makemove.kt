@@ -5,9 +5,9 @@ import kotlin.experimental.ExperimentalNativeApi
 
 private fun Position.togglePiece(piece: Piece, sq: Square) {
     board[sq] = board[sq] xor piece
-    pieceBB[piece.type()] = pieceBB[piece.type()] xor sq
-    colorBB[piece.color()] = colorBB[piece.color()] xor sq
-    key = key xor PieceKeys[piece][sq]
+    pieceBB[piece.type.type] = pieceBB[piece.type.type] xor sq
+    colorBB[piece.color.color] = colorBB[piece.color.color] xor sq
+    key = key xor PieceKeys[piece.piece][sq]
 }
 
 private fun Position.movePiece(piece: Piece, from: Square, to: Square) {
@@ -41,14 +41,14 @@ fun Position.makeMove(move: Move): Boolean {
     histPly++
     nodeCount++
 
-    if (captured != 0) {
+    if (captured != Piece.empty()) {
         mr50 = 0
         togglePiece(captured, captSq)
     }
 
     movePiece(mover, from, to)
 
-    if (mover.type() == PAWN) {
+    if (mover.type == PAWN) {
         mr50 = 0
 
         if (from xor to == 16) {
@@ -67,10 +67,10 @@ fun Position.makeMove(move: Move): Boolean {
         }
 
     key = key xor SideKey
-    stm = stm xor 1
-    fullmove += stm
+    stm = !stm
+    fullmove += stm.color
 
-    if (inCheck(stm xor 1)) {
+    if (inCheck(!stm)) {
         takeMove()
         return false
     }
@@ -82,8 +82,8 @@ fun Position.makeMove(move: Move): Boolean {
 fun Position.takeMove() {
 
     histPly--
-    fullmove -= stm
-    stm = stm xor 1
+    fullmove -= stm.color
+    stm = !stm
 
     val move = history(0).move
     val from = move.from()
@@ -92,7 +92,7 @@ fun Position.takeMove() {
     val captured = history(0).captured
 
     if (move.type() == CASTLE) {
-        assert(mover.type() == KING)
+        assert(mover.type == KING)
         when (to) {
             G1 -> movePiece(makePiece(WHITE, ROOK), F1, H1)
             C1 -> movePiece(makePiece(WHITE, ROOK), D1, A1)
@@ -101,18 +101,18 @@ fun Position.takeMove() {
         }
     }
 
-    assert(mover.color() in BLACK..WHITE)
-    assert(mover.type() in PAWN..KING)
+    assert(mover.color in BLACK..WHITE)
+    assert(mover.type in PAWN..KING)
     movePiece(mover, to, from)
 
-    if (captured != 0) {
-        assert(captured.color() in BLACK..WHITE)
-        assert(captured.type() in PAWN..QUEEN)
+    if (captured != Piece.empty()) {
+        assert(captured.color in BLACK..WHITE)
+        assert(captured.type in PAWN..QUEEN)
         togglePiece(captured, move.captureSq())
     }
 
     if (move.type() == PROMO) {
-        assert(mover != PAWN && mover != KING)
+        assert(mover.type != PAWN && mover.type != KING)
         togglePiece(mover, from)
         togglePiece(makePiece(stm, PAWN), from)
     }

@@ -16,18 +16,18 @@ internal class PositionTest : FunSpec({
 
     test("getPieceBB") {
         startPos.apply {
-            pieceBB[  PAWN] shouldBe Bitboard(0x00FF00000000FF00U)
-            pieceBB[KNIGHT] shouldBe Bitboard(0x4200000000000042U)
-            pieceBB[BISHOP] shouldBe Bitboard(0x2400000000000024U)
-            pieceBB[  ROOK] shouldBe Bitboard(0x8100000000000081U)
-            pieceBB[ QUEEN] shouldBe Bitboard(0x0800000000000008U)
-            pieceBB[  KING] shouldBe Bitboard(0x1000000000000010U)
+            pieceBB[  PAWN.type] shouldBe Bitboard(0x00FF00000000FF00U)
+            pieceBB[KNIGHT.type] shouldBe Bitboard(0x4200000000000042U)
+            pieceBB[BISHOP.type] shouldBe Bitboard(0x2400000000000024U)
+            pieceBB[  ROOK.type] shouldBe Bitboard(0x8100000000000081U)
+            pieceBB[ QUEEN.type] shouldBe Bitboard(0x0800000000000008U)
+            pieceBB[  KING.type] shouldBe Bitboard(0x1000000000000010U)
         }
     }
 
     test("getColorBB") {
-        startPos.colorBB[WHITE] shouldBe Bitboard(0x000000000000FFFFU)
-        startPos.colorBB[BLACK] shouldBe Bitboard(0xFFFF000000000000U)
+        startPos.colorBB[WHITE.color] shouldBe Bitboard(0x000000000000FFFFU)
+        startPos.colorBB[BLACK.color] shouldBe Bitboard(0xFFFF000000000000U)
     }
 
     test("getBoard") {

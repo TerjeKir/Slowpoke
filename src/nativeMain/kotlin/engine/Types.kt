@@ -11,9 +11,14 @@ const val STARTFEN: String = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq
 @Suppress("SpellCheckingInspection")
 const val KIWIPETE: String = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1"
 
-typealias Color = Int
-const val WHITE: Color = 1
-const val BLACK: Color = 0
+value class Color(val color: Int) {
+
+    operator fun not() = Color(color xor 1)
+
+    operator fun rangeTo(other: Color) = (color .. other.color).map { Color(it) }
+}
+val WHITE = Color(1)
+val BLACK = Color(0)
 
 typealias Score = Int
 fun Score.mateScore() = when {
@@ -28,20 +33,36 @@ const val MATE: Score = 30000
 const val MATE_IN_MAX: Score = MATE - 999
 const val INF: Score = MATE + 1
 
-typealias PieceType = Int
-const val PAWN: PieceType = 1
-const val KNIGHT: PieceType = 2
-const val BISHOP: PieceType = 3
-const val ROOK: PieceType = 4
-const val QUEEN: PieceType = 5
-const val KING: PieceType = 6
+value class PieceType(val type: Int) {
+    operator fun minus(other: PieceType) = PieceType(type - other.type)
+    operator fun rangeTo(other: PieceType) = (type .. other.type).map { PieceType(it) }
 
-typealias Piece = Int
-fun makePiece(c: Color, pt: PieceType): Piece = (c shl 3) + pt
-fun Piece.color(): Color = this shr 3
-fun Piece.type(): PieceType = this and 7
-fun Piece.toPieceChar(): Char = ".pnbrqk..PNBRQK"[this]
-fun Char.toPiece(): Piece = ".pnbrqk..PNBRQK".indexOf(this)
+    fun toPieceChar(): Char = ".pnbrqk"[type]
+}
+val PAWN = PieceType(1)
+val KNIGHT = PieceType(2)
+val BISHOP = PieceType(3)
+val ROOK = PieceType(4)
+val QUEEN = PieceType(5)
+val KING = PieceType(6)
+
+value class Piece(val piece: Int) {
+
+    constructor(c: Color, pt: PieceType) : this((c.color shl 3) + pt.type)
+
+    infix fun xor(other: Piece) = Piece(piece xor other.piece)
+
+    val color: Color
+        get() = Color(piece shr 3)
+    val type: PieceType
+        get() = PieceType(piece and 7)
+    fun toPieceChar(): Char = ".pnbrqk..PNBRQK"[piece]
+
+    companion object {
+        fun empty() = Piece(0)
+    }
+}
+fun Char.toPiece() = Piece(".pnbrqk..PNBRQK".indexOf(this))
 
 typealias Direction = Int
 const val NORTH = 8

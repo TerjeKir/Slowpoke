@@ -106,7 +106,7 @@ fun Position.quiescence(alpha_: Int, beta: Int, ply: Int): Score {
 
     for (move in genMoves()) {
 
-        if (move.promo() != QUEEN && pieceOn(move.captureSq()) == 0) continue
+        if (move.promo() != QUEEN && pieceOn(move.captureSq()) == Piece.empty()) continue
         if (!makeMove(move)) continue
         val score = -quiescence(-beta, -alpha, ply + 1)
         takeMove()

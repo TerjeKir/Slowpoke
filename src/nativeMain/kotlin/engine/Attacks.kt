@@ -4,7 +4,7 @@ import kotlin.experimental.ExperimentalNativeApi
 
 
 private val PawnAttacks = Array(2) { color -> Array(64) { sq ->
-    pawnBBAttackBB(color, Bitboard(sq))
+    pawnBBAttackBB(Color(color), Bitboard(sq))
 }}
 
 private val PseudoAttacks = Array(8) { pt -> Array(64) { sq ->
@@ -12,7 +12,7 @@ private val PseudoAttacks = Array(8) { pt -> Array(64) { sq ->
     val kSteps = intArrayOf( -9, -8, -7, -1,  1,  7,  8,  9)
     val nSteps = intArrayOf(-17,-15,-10, -6,  6, 10, 15, 17)
 
-    when (pt) {
+    when (PieceType(pt)) {
         KNIGHT -> nSteps
         KING   -> kSteps
         else   -> IntArray(0)
@@ -35,12 +35,12 @@ fun attackBB(pt: PieceType, sq: Square, occ: Bitboard = Bitboard()): Bitboard {
         BISHOP -> BMagics[sq].attackBB(occ)
         ROOK   -> RMagics[sq].attackBB(occ)
         QUEEN  -> attackBB(BISHOP, sq, occ) or attackBB(ROOK, sq, occ)
-        else   -> PseudoAttacks[pt][sq]
+        else   -> PseudoAttacks[pt.type][sq]
     }
 }
 
 fun pawnAttackBB(color: Color, sq: Square): Bitboard {
-    return PawnAttacks[color][sq]
+    return PawnAttacks[color.color][sq]
 }
 
 fun pawnBBAttackBB(color: Color, pawns: Bitboard): Bitboard {

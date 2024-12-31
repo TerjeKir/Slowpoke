@@ -4,17 +4,17 @@ package engine
 class Position() {
 
     class History {
-        var key: Key = Key.zero()
-        var move: Move = Move.noMove()
+        var key = Key.zero()
+        var move = Move.noMove()
         var cr: CastlingRight = 0
         var ep: Square = 0
         var mr50: Int = 0
-        var captured: Piece = 0
+        var captured = Piece.empty()
     }
 
     var pieceBB: Array<Bitboard> = Array(7) { Bitboard() }
     var colorBB: Array<Bitboard> = Array(2) { Bitboard() }
-    var board: Array<Piece> = Array(64) { 0 }
+    var board = Array(64) { Piece.empty() }
 
     var key: Key = Key.zero()
 
@@ -36,9 +36,9 @@ class Position() {
 
         fun addPiece(piece: Piece, sq: Square) {
             board[sq] = piece
-            pieceBB[piece.type()]  = pieceBB[piece.type()]  or sq
-            colorBB[piece.color()] = colorBB[piece.color()] or sq
-            key = key xor PieceKeys[piece][sq]
+            pieceBB[piece.type.type] = pieceBB[piece.type.type] or sq
+            colorBB[piece.color.color] = colorBB[piece.color.color] or sq
+            key = key xor PieceKeys[piece.piece][sq]
         }
 
         var sq = A8
@@ -81,7 +81,7 @@ class Position() {
             var i = 0
             for (file in FILE_A..FILE_H) {
                 val piece = pieceOn(makeSquare(rank, file))
-                if (piece != 0) {
+                if (piece != Piece.empty()) {
                     if (i > 0) res.append(i)
                     res.append(piece.toPieceChar())
                     i = 0
@@ -110,16 +110,16 @@ class Position() {
 
     fun pieceOn(sq: Square) = board[sq]
 
-    fun pieces(c: Color, pt: PieceType) = colorBB[c] and pieceBB[pt]
+    fun pieces(c: Color, pt: PieceType) = colorBB[c.color] and pieceBB[pt.type]
 
-    fun inCheck(c: Color) = sqAttacked(pieces(c, KING).lsb(), c xor 1)
+    fun inCheck(c: Color) = sqAttacked(pieces(c, KING).lsb(), !c)
 
     fun sqAttacked(sq: Square, c: Color): Boolean {
-        val bishops = colorBB[c] and (pieceBB[QUEEN] or pieceBB[BISHOP])
-        val rooks   = colorBB[c] and (pieceBB[QUEEN] or pieceBB[ROOK])
-        val occ = colorBB[WHITE] or colorBB[BLACK]
+        val bishops = colorBB[c.color] and (pieceBB[QUEEN.type] or pieceBB[BISHOP.type])
+        val rooks   = colorBB[c.color] and (pieceBB[QUEEN.type] or pieceBB[ROOK.type])
+        val occ = colorBB[WHITE.color] or colorBB[BLACK.color]
 
-        return (pawnAttackBB(c xor 1, sq) and pieces(c, PAWN)).nonEmpty()
+        return (pawnAttackBB(!c, sq) and pieces(c, PAWN)).nonEmpty()
             || (attackBB(KNIGHT, sq) and pieces(c, KNIGHT)).nonEmpty()
             || (attackBB(KING,   sq) and pieces(c, KING)).nonEmpty()
             || (attackBB(BISHOP, sq, occ) and bishops).nonEmpty()

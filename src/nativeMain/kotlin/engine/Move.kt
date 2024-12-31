@@ -4,14 +4,14 @@ package engine
 value class Move(val move: UShort) {
 
     constructor(from: Square, to: Square, mt: MoveType = NORMAL, promo: PieceType = KNIGHT) :
-        this((mt or ((promo - KNIGHT) shl 12) or (from shl 6) or to).toUShort())
+        this((mt or ((promo - KNIGHT).type shl 12) or (from shl 6) or to).toUShort())
 
     fun from(): Square = (move.toInt() ushr 6) and 0x3F
     fun to(): Square = move.toInt() and 0x3F
     fun type(): MoveType = move.toInt() and (3 shl 14)
-    fun promo(): PieceType = KNIGHT + ((move.toInt() ushr 12) and 3)
+    fun promo(): PieceType = PieceType(KNIGHT.type + ((move.toInt() ushr 12) and 3))
 
-    fun captureSq(): PieceType = if (type() != ENPAS) to() else to() xor 8
+    fun captureSq(): Square = if (type() != ENPAS) to() else to() xor 8
 
     fun toUCI(): String {
         val promo = if (type() == PROMO) promo().toPieceChar() else ""
@@ -35,13 +35,13 @@ fun String.toMove(pos: Position): Move {
 
     val from = tokens.next().toSquare()
     val to = tokens.next().toSquare()
-    val pt = pos.pieceOn(from).type()
+    val pt = pos.pieceOn(from).type
 
     return if (tokens.hasNext())
-        Move(from, to, PROMO, tokens.next()[0].toPiece().type())
+        Move(from, to, PROMO, tokens.next()[0].toPiece().type)
     else if (pt == KING && from.distanceTo(to) > 1)
         Move(from, to, CASTLE)
-    else if (pt == PAWN && from.file() != to.file() && pos.pieceOn(to) == 0)
+    else if (pt == PAWN && from.file() != to.file() && pos.pieceOn(to) == Piece.empty())
         Move(from, to, ENPAS)
     else
         Move(from, to)
